@@ -7,19 +7,17 @@
 //
 
 import UIKit
+import MapKit
 
 class TravelLocationsMapViewController: UIViewController, TravelLocationsMapContractView {
 
+    @IBOutlet weak var mapView: MKMapView!
+    
+    var presenter: TravelLocationsMapContractPresenter!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        presenter = TravelLocationsMapPresenter(view: self)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
 }
 

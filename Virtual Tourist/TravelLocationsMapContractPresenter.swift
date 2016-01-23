@@ -10,4 +10,7 @@ import Foundation
 
 protocol TravelLocationsMapContractPresenter {
     
+    var view: TravelLocationsMapContractView {get}
+
+    
 }

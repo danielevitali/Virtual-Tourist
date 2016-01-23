@@ -10,4 +10,10 @@ import Foundation
 
 class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     
+    let view: TravelLocationsMapContractView
+    
+    init(view: TravelLocationsMapContractView) {
+        self.view = view
+    }
+    
 }

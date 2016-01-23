@@ -10,4 +10,6 @@ import Foundation
 
 protocol TravelLocationsMapContractView {
     
+    var presenter: TravelLocationsMapContractPresenter! {get set}
+    
 }
