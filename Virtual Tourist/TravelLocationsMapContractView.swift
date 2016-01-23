@@ -7,9 +7,12 @@
 //
 
 import Foundation
+import MapKit
 
 protocol TravelLocationsMapContractView {
     
     var presenter: TravelLocationsMapContractPresenter! {get set}
+ 
+    func showMapRegion(region: MapRegion)
     
 }

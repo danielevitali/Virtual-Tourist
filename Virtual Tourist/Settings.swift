@@ -11,36 +11,19 @@ import MapKit
 
 class Settings {
     
-    private static let KEY_MAP_ZOOM = "KEY_MAP_ZOOM"
-    private static let KEY_MAP_LATITUDE = "KEY_MAP_LATITUDE"
-    private static let KEY_MAP_LONGITUDE = "KEY_MAP_LONGITUDE"
+    private static let KEY_MAP_REGION = "KEY_MAP_REGION"
     
-    private static let DEFAULT_ZOOM_LEVEL = 10.0
-    
-    static func getMapZoomLevel() -> Double {
+    static func getMapRegion() -> MapRegion? {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        if let zoom = userDefaults.objectForKey(KEY_MAP_ZOOM) {
-            return (zoom as! Double)
-        }
-        return DEFAULT_ZOOM_LEVEL
-    }
-    
-    static func getMapCoordinates() -> CLLocationCoordinate2D? {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        if let latitude = userDefaults.objectForKey(KEY_MAP_LATITUDE), let longitude = userDefaults.objectForKey(KEY_MAP_LONGITUDE) {
-            return CLLocationCoordinate2D(latitude: (latitude as! Double), longitude: (longitude as! Double))
+        if let data = userDefaults.dataForKey(KEY_MAP_REGION) {
+            return (NSKeyedUnarchiver.unarchiveObjectWithData(data) as! MapRegion)
         }
         return nil
     }
     
-    static func putMapZoomLevel(zoom: Double) {
+    static func setMapRegion(region: MapRegion) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setDouble(zoom, forKey: KEY_MAP_ZOOM)
-    }
-    
-    static func putMapCoordinates(coordinates: CLLocationCoordinate2D) {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setDouble(coordinates.latitude, forKey: KEY_MAP_LATITUDE)
-        userDefaults.setDouble(coordinates.longitude, forKey: KEY_MAP_LONGITUDE)
+        let data = NSKeyedArchiver.archivedDataWithRootObject(region)
+        userDefaults.setObject(data, forKey: KEY_MAP_REGION)
     }
 }

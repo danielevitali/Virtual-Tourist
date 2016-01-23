@@ -7,10 +7,15 @@
 //
 
 import Foundation
+import MapKit
 
 protocol TravelLocationsMapContractPresenter {
     
     var view: TravelLocationsMapContractView {get}
 
+    func onViewVisible()
     
+    func onViewHidden()
+    
+    func onMapRegionChanged(region: MapRegion)
 }

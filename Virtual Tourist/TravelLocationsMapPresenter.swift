@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     
@@ -16,4 +17,17 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
         self.view = view
     }
     
+    func onViewVisible() {
+        if let region = DataManager.getInstance().getLastMapRegion() {
+            view.showMapRegion(region)
+        }
+    }
+    
+    func onViewHidden() {
+        
+    }
+    
+    func onMapRegionChanged(region: MapRegion) {
+        DataManager.getInstance().setLastMapRegion(region)
+    }
 }

@@ -11,25 +11,23 @@ import MapKit
 
 class DataManager {
     
-    static let instance: DataManager = DataManager()
+    private static let instance: DataManager = DataManager()
+    
+    private var currentMapRegion: MapRegion?
     
     static func getInstance() -> DataManager {
         return instance
     }
     
-    func getLastMapZoomLevel() -> Double {
-        return Settings.getMapZoomLevel()
+    func getLastMapRegion() -> MapRegion? {
+        currentMapRegion = Settings.getMapRegion()
+        return currentMapRegion
     }
     
-    func getLastMapCoordinates() -> CLLocationCoordinate2D? {
-        return Settings.getMapCoordinates()
-    }
-    
-    func setLastMapZoomLevel(zoom: Double) {
-        Settings.putMapZoomLevel(zoom)
-    }
-    
-    func setLastMapCoordinates(coordinates: CLLocationCoordinate2D) {
-        Settings.putMapCoordinates(coordinates)
+    func setLastMapRegion(region: MapRegion) {
+        if currentMapRegion != region {
+            Settings.setMapRegion(region)
+            currentMapRegion = region
+        }
     }
 }
