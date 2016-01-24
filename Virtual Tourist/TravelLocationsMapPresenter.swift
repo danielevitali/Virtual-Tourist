@@ -33,18 +33,16 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
         DataManager.getInstance().setLastMapRegion(region)
     }
     
-    func onDataChange(type: NSFetchedResultsChangeType, oldIndexPath: NSIndexPath?, newIndexPath: NSIndexPath?) {
-        let fetchedPinsController = DataManager.getInstance().fetchedPinsController
+    func onDataChange(type: NSFetchedResultsChangeType, pinChanged pin: Pin) {
         switch type {
         case .Insert:
-            view.showPin(fetchedPinsController.objectAtIndexPath(newIndexPath) as! Pin)
+            view.addPin(pin)
         case .Delete:
-            view.removePin([oldIndexPath!])
-        case .Update:
-            view.updatePinAtIndexPath(oldIndexPath!)
+            view.removePin(pin)
         case .Move:
-            view.removePinsAtIndexPaths([oldIndexPath!])
-            view.showNewPinsAtIndexPaths([newIndexPath!])
+            view.removePin(pin)
+            view.addPin(pin)
+        default: break
         }
     }
     

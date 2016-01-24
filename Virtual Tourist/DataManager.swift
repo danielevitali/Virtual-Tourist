@@ -19,6 +19,7 @@ class DataManager {
     
     lazy var fetchedPinsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)]
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: CoreDataStackManager.getInstance().managedObjectContext,
             sectionNameKeyPath: nil,

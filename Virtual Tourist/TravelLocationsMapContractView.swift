@@ -16,9 +16,7 @@ protocol TravelLocationsMapContractView: NSFetchedResultsControllerDelegate {
  
     func showMapRegion(region: MapRegion)
     
-    func showNewPinsAtIndexPaths(indexPaths: [NSIndexPath])
+    func addPin(pin: Pin)
     
-    func removePinsAtIndexPaths(indexPaths: [NSIndexPath])
-    
-    func updatePinAtIndexPath(indexPath: NSIndexPath)
+    func removePin(pin: Pin)
 }

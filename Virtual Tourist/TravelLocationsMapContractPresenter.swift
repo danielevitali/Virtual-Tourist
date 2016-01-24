@@ -20,5 +20,5 @@ protocol TravelLocationsMapContractPresenter {
     
     func onMapRegionChanged(region: MapRegion)
     
-    func onDataChange(type: NSFetchedResultsChangeType, oldIndexPath: NSIndexPath?, newIndexPath: NSIndexPath?)
+    func onDataChange(type: NSFetchedResultsChangeType, pinChanged: Pin)
 }

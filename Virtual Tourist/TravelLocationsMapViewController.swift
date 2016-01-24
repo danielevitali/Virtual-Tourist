@@ -50,31 +50,20 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
             let coordinates = mapView.convertPoint(point, toCoordinateFromView:mapView)
             
             let pin = DataManager.getInstance().createPin(coordinates.latitude, longitude: coordinates.longitude)
-            
-            let location = CLLocationCoordinate2DMake(pin.latitude, pin.longitude)
-            let dropPin = MKPointAnnotation()
-            dropPin.coordinate = location
-            mapView.addAnnotation(dropPin)
+            mapView.addAnnotation(pin)
         }
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        presenter.onDataChange(type, oldIndexPath: indexPath, newIndexPath: newIndexPath)
+        presenter.onDataChange(type, pinChanged: anObject as! Pin)
     }
     
-    func showNewPinsAtIndexPaths(indexPaths: [NSIndexPath]) {
-        
-        tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+    func addPin(pin: Pin) {
+        mapView.addAnnotation(pin)
     }
     
-    func removePinsAtIndexPaths(indexPaths: [NSIndexPath]) {
-        tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-    }
-    
-    func updatePinAtIndexPath(indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath!) as! ActorTableViewCell
-        let movie = controller.objectAtIndexPath(indexPath!) as! Movie
-        self.configureCell(cell, movie: movie)
+    func removePin(pin: Pin) {
+        mapView.removeAnnotation(pin)
     }
 }
 
