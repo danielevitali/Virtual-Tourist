@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import CoreData
 
 protocol TravelLocationsMapContractPresenter {
     
@@ -18,4 +19,6 @@ protocol TravelLocationsMapContractPresenter {
     func onViewHidden()
     
     func onMapRegionChanged(region: MapRegion)
+    
+    func onDataChange(type: NSFetchedResultsChangeType, oldIndexPath: NSIndexPath?, newIndexPath: NSIndexPath?)
 }

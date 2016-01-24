@@ -7,13 +7,19 @@
 //
 
 import Foundation
+import CoreData
 
-class Photo {
+class Photo: NSManagedObject {
     
-    let path: String
+    @NSManaged var path: String
     
-    init(path: String) {
+    init(path: String, context: NSManagedObjectContext) {
+        let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
+        super.init(entity: entity,insertIntoManagedObjectContext: context)
         self.path = path
     }
     
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
 }

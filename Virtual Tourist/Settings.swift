@@ -13,7 +13,7 @@ class Settings {
     
     private static let KEY_MAP_REGION = "KEY_MAP_REGION"
     
-    static func getMapRegion() -> MapRegion? {
+    class func getMapRegion() -> MapRegion? {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let data = userDefaults.dataForKey(KEY_MAP_REGION) {
             return (NSKeyedUnarchiver.unarchiveObjectWithData(data) as! MapRegion)
@@ -21,7 +21,7 @@ class Settings {
         return nil
     }
     
-    static func setMapRegion(region: MapRegion) {
+    class func setMapRegion(region: MapRegion) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         let data = NSKeyedArchiver.archivedDataWithRootObject(region)
         userDefaults.setObject(data, forKey: KEY_MAP_REGION)

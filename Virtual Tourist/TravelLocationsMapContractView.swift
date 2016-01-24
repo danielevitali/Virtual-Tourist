@@ -8,11 +8,17 @@
 
 import Foundation
 import MapKit
+import CoreData
 
-protocol TravelLocationsMapContractView {
+protocol TravelLocationsMapContractView: NSFetchedResultsControllerDelegate {
     
     var presenter: TravelLocationsMapContractPresenter! {get set}
  
     func showMapRegion(region: MapRegion)
     
+    func showNewPinsAtIndexPaths(indexPaths: [NSIndexPath])
+    
+    func removePinsAtIndexPaths(indexPaths: [NSIndexPath])
+    
+    func updatePinAtIndexPath(indexPath: NSIndexPath)
 }
