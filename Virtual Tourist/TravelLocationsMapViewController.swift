@@ -20,7 +20,7 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         super.viewDidLoad()
         presenter = TravelLocationsMapPresenter(view: self)
         
-        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: mapView, action: "handleLongPressGesture:")
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPressGesture:")
         mapView.addGestureRecognizer(longPressGestureRecognizer)
     }
     
