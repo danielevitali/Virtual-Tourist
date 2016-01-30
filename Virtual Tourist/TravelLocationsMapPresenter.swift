@@ -13,9 +13,11 @@ import CoreData
 class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     
     let view: TravelLocationsMapContractView
+    var pins: [Pin]
     
     init(view: TravelLocationsMapContractView) {
         self.view = view
+        pins = [Pin]()
     }
     
     func onViewVisible() {
@@ -33,15 +35,12 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
         DataManager.getInstance().setLastMapRegion(region)
     }
     
-    func onDataChange(type: NSFetchedResultsChangeType, pinChanged pin: Pin) {
+    func onDataChange(pin: Pin, forChangeType type: NSFetchedResultsChangeType) {
         switch type {
         case .Insert:
             view.addPin(pin)
         case .Delete:
             view.removePin(pin)
-        case .Move:
-            view.removePin(pin)
-            view.addPin(pin)
         default: break
         }
     }

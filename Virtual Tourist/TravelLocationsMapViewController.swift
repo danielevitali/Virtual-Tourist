@@ -55,7 +55,8 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        presenter.onDataChange(type, pinChanged: anObject as! Pin)
+        let pin = anObject as! Pin
+        presenter.onDataChange(pin, forChangeType: type)
     }
     
     func addPin(pin: Pin) {

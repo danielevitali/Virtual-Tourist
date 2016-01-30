@@ -12,13 +12,13 @@ import MapKit
 
 class Pin: NSManagedObject, MKAnnotation {
     
-    @NSManaged var latitude: Double
-    @NSManaged var longitude: Double
+    @NSManaged var latitude: NSNumber
+    @NSManaged var longitude: NSNumber
     @NSManaged var photos: [Photo]?
     @NSManaged var timeStamp: NSDate
     
     lazy var coordinate: CLLocationCoordinate2D = {
-        return CLLocationCoordinate2D(latitude: self.latitude, longitude: self.longitude)
+        return CLLocationCoordinate2D(latitude: self.latitude as Double, longitude: self.longitude as Double)
     }()
     
     init(latitude: Double, longitude: Double, context: NSManagedObjectContext) {
