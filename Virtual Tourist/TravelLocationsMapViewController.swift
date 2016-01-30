@@ -15,6 +15,7 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     @IBOutlet weak var mapView: MKMapView!
     
     var presenter: TravelLocationsMapContractPresenter!
+    var selectedPin: Pin!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +33,7 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     
     func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let rect = mapView.visibleMapRect
-        let region = MapRegion(latitude: rect.origin.x, originY: rect.origin.y, width: rect.size.width, height: rect.size.height)
+        let region = MapRegion(originX: rect.origin.x, originY: rect.origin.y, width: rect.size.width, height: rect.size.height)
         presenter.onMapRegionChanged(region)
     }
     
@@ -48,9 +49,7 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         if sender.state != .Ended {
             let point = sender.locationInView(mapView)
             let coordinates = mapView.convertPoint(point, toCoordinateFromView:mapView)
-            
-            let pin = DataManager.getInstance().createPin(coordinates.latitude, longitude: coordinates.longitude)
-            mapView.addAnnotation(pin)
+            presenter.onLongClickOnMap(coordinates.latitude, longitude: coordinates.longitude)
         }
     }
     
@@ -65,6 +64,16 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     
     func removePin(pin: Pin) {
         mapView.removeAnnotation(pin)
+    }
+    
+    func showPhotoAlbum(pin: Pin) {
+        selectedPin = pin
+        performSegueWithIdentifier("photoAlbumSegue", sender: self)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let viewController = segue.destinationViewController as! PhotoAlbumViewController
+        viewController.selectedPin = selectedPin
     }
 }
 

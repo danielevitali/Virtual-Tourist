@@ -19,4 +19,6 @@ protocol TravelLocationsMapContractView: NSFetchedResultsControllerDelegate {
     func addPin(pin: Pin)
     
     func removePin(pin: Pin)
+    
+    func showPhotoAlbum(pin: Pin)
 }

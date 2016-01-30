@@ -9,5 +9,12 @@
 import Foundation
 
 protocol PhotoAlbumContractPresenter {
+ 
+    var view: PhotoAlbumContractView {get}
+    var photosCount: Int? {get}
+    
+    func onViewVisible()
+    
+    func onViewHidden()
     
 }

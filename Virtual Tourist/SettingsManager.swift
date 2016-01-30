@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 
-class Settings {
+class SettingsManager {
     
     private static let KEY_MAP_REGION = "KEY_MAP_REGION"
     

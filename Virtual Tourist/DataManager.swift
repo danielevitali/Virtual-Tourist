@@ -19,7 +19,7 @@ class DataManager {
     
     lazy var fetchedPinsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: CoreDataStackManager.getInstance().managedObjectContext,
             sectionNameKeyPath: nil,
@@ -32,21 +32,21 @@ class DataManager {
     }
     
     init() {
-        coreDataStackManager = CoreDataStackManager.getInstance()
+        self.coreDataStackManager = CoreDataStackManager.getInstance()
     }
     
     func getLastMapRegion() -> MapRegion? {
         if let currentMapRegion = currentMapRegion {
             return currentMapRegion
         } else {
-            currentMapRegion = Settings.getMapRegion()
+            currentMapRegion = SettingsManager.getMapRegion()
             return currentMapRegion
         }
     }
     
     func setLastMapRegion(region: MapRegion) {
         if currentMapRegion != region {
-            Settings.setMapRegion(region)
+            SettingsManager.setMapRegion(region)
             currentMapRegion = region
         }
     }
@@ -62,5 +62,18 @@ class DataManager {
         let pin = Pin(latitude: latitude, longitude: longitude, context: coreDataStackManager.managedObjectContext)
         coreDataStackManager.saveContext()
         return pin
+    }
+    
+    func searchPhotos(pin: Pin, photosCountCallback: (count: Int?, errorMessage: String?) -> Void, photosCallback: (photos: [Photo]?, errorMessage: String?) -> Void) {
+        NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, callback: { (photosResponse, errorResponse) in
+            if let photosResponse = photosResponse {
+                photosCountCallback(count: photosResponse.photos.count, errorMessage: nil)
+
+                //TODO download and save photos
+                //photosCallback(photos: photos, errorMessage: nil)
+            } else {
+                photosCountCallback(count: nil, errorMessage: errorResponse!.message)
+            }
+        })
     }
 }

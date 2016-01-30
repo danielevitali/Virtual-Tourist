@@ -7,7 +7,20 @@
 //
 
 import Foundation
+import CoreData
 
-protocol PhotoAlbumContractView {
+protocol PhotoAlbumContractView: NSFetchedResultsControllerDelegate {
+    
+    var presenter: PhotoAlbumContractPresenter! {get set}
+    
+    func showPin(pin: Pin, span: Double)
+    
+    func toggleActivityIndicator(visible: Bool)
+    
+    func hideAlbum()
+    
+    func showAlbum(photosCount: Int)
+    
+    func showError(message: String)
     
 }

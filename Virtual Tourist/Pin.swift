@@ -12,10 +12,10 @@ import MapKit
 
 class Pin: NSManagedObject, MKAnnotation {
     
+    @NSManaged var id: NSNumber
     @NSManaged var latitude: NSNumber
     @NSManaged var longitude: NSNumber
     @NSManaged var photos: [Photo]?
-    @NSManaged var timeStamp: NSDate
     
     lazy var coordinate: CLLocationCoordinate2D = {
         return CLLocationCoordinate2D(latitude: self.latitude as Double, longitude: self.longitude as Double)
@@ -24,9 +24,10 @@ class Pin: NSManagedObject, MKAnnotation {
     init(latitude: Double, longitude: Double, context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
         super.init(entity: entity,insertIntoManagedObjectContext: context)
+        self.id = NSDate().timeIntervalSince1970
         self.latitude = latitude
         self.longitude = longitude
-        self.timeStamp = NSDate()
+        self.photos = [Photo]()
     }
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {

@@ -20,8 +20,8 @@ class MapRegion: NSObject, NSCoding {
     let width: Double
     let height: Double
     
-    init(latitude: Double, originY: Double, width: Double, height: Double) {
-        self.originX = latitude
+    init(originX: Double, originY: Double, width: Double, height: Double) {
+        self.originX = originX
         self.originY = originY
         self.width = width
         self.height = height

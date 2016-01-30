@@ -11,11 +11,13 @@ import CoreData
 
 class Photo: NSManagedObject {
     
+    @NSManaged var id: String
     @NSManaged var path: String
     
-    init(path: String, context: NSManagedObjectContext) {
+    init(id: String, path: String, context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
         super.init(entity: entity,insertIntoManagedObjectContext: context)
+        self.id = id
         self.path = path
     }
     

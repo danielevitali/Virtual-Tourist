@@ -21,4 +21,9 @@ protocol TravelLocationsMapContractPresenter {
     func onMapRegionChanged(region: MapRegion)
     
     func onDataChange(pin: Pin, forChangeType type: NSFetchedResultsChangeType)
+    
+    func onLongClickOnMap(latitude: Double, longitude: Double)
+    
+    func onPinClick(pin: Pin)
+    
 }

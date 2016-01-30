@@ -13,11 +13,10 @@ import CoreData
 class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     
     let view: TravelLocationsMapContractView
-    var pins: [Pin]
     
     init(view: TravelLocationsMapContractView) {
         self.view = view
-        pins = [Pin]()
+
     }
     
     func onViewVisible() {
@@ -43,6 +42,14 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
             view.removePin(pin)
         default: break
         }
+    }
+    
+    func onLongClickOnMap(latitude: Double, longitude: Double) {
+        DataManager.getInstance().createPin(latitude, longitude: longitude)
+    }
+    
+    func onPinClick(pin: Pin) {
+        view.showPhotoAlbum(pin)
     }
     
 }
