@@ -27,7 +27,6 @@ class Pin: NSManagedObject, MKAnnotation {
         self.id = NSDate().timeIntervalSince1970
         self.latitude = latitude
         self.longitude = longitude
-        self.photos = [Photo]()
     }
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {

@@ -14,7 +14,8 @@ class PhotosResponse {
     
     init(response: NSDictionary) {
         self.photos = [PhotoResponse]()
-        let array = response["photo"] as! NSArray
+        let photos = response["photos"] as! NSDictionary
+        let array = photos["photo"] as! NSArray
         for element in array {
             self.photos.append(PhotoResponse(response: element as! NSDictionary))
         }

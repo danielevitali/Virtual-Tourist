@@ -22,8 +22,11 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     
     func onViewVisible() {
         view.showPin(pin, span: 100)
+        view.toggleActivityIndicator(true)
+        view.hideAlbum()
         DataManager.getInstance().searchPhotos(pin, photosCountCallback: { (count, errorMessage) -> Void in
             self.photosCount = count
+            self.view.toggleActivityIndicator(false)
             if let count = count {
                 self.view.showAlbum(count)
             } else {

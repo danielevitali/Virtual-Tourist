@@ -38,6 +38,7 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
         switch type {
         case .Insert:
             view.addPin(pin)
+            view.showPhotoAlbum(pin)
         case .Delete:
             view.removePin(pin)
         default: break

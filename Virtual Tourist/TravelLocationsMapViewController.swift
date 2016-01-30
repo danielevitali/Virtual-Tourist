@@ -16,18 +16,19 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     
     var presenter: TravelLocationsMapContractPresenter!
     var selectedPin: Pin!
+    var longPressGestureRecognizer: UILongPressGestureRecognizer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter = TravelLocationsMapPresenter(view: self)
         
-        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPressGesture:")
-        mapView.addGestureRecognizer(longPressGestureRecognizer)
+        longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPressGesture:")
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         presenter.onViewVisible()
+        mapView.addGestureRecognizer(longPressGestureRecognizer)
         mapView.delegate = self
     }
     
@@ -67,6 +68,7 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     }
     
     func showPhotoAlbum(pin: Pin) {
+        mapView.removeGestureRecognizer(longPressGestureRecognizer)
         let viewController = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbumViewController") as! PhotoAlbumViewController
         viewController.selectedPin = pin
         self.navigationController!.pushViewController(viewController, animated: true)
