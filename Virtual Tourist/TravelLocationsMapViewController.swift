@@ -67,13 +67,9 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     }
     
     func showPhotoAlbum(pin: Pin) {
-        selectedPin = pin
-        performSegueWithIdentifier("photoAlbumSegue", sender: self)
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let viewController = segue.destinationViewController as! PhotoAlbumViewController
-        viewController.selectedPin = selectedPin
+        let viewController = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbumViewController") as! PhotoAlbumViewController
+        viewController.selectedPin = pin
+        self.navigationController!.pushViewController(viewController, animated: true)
     }
 }
 
