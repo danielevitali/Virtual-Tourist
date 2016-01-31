@@ -15,8 +15,10 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var photosCollection: UICollectionView!
+    @IBOutlet weak var photosFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var lblNoImages: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var btnNewCollection: UIButton!
     
     var presenter: PhotoAlbumContractPresenter!
     var selectedPin: Pin!
@@ -24,6 +26,18 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter = PhotoAlbumPresenter(view: self, pin: selectedPin)
+        
+        let itemSpace: CGFloat = 3.0
+        let itemSize = (view.frame.size.width - 3 * itemSpace) / 3
+        photosFlowLayout.minimumInteritemSpacing = itemSpace
+        photosFlowLayout.minimumLineSpacing = itemSpace
+        photosFlowLayout.itemSize = CGSizeMake(itemSize, itemSize)
+        photosCollection.backgroundColor = UIColor.whiteColor()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -64,6 +78,10 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
             photosCollection.hidden = true
             lblNoImages.hidden = false
         }
+    }
+    
+    func toggleNewCollectionButton(enable: Bool) {
+        btnNewCollection.enabled = enable
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

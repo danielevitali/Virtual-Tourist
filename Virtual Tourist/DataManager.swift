@@ -20,10 +20,12 @@ class DataManager {
     lazy var fetchedPinsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-            managedObjectContext: CoreDataStackManager.getInstance().managedObjectContext,
+        let fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: self.coreDataStackManager.managedObjectContext,
             sectionNameKeyPath: nil,
-            cacheName: nil)
+            cacheName: nil
+        )
         return fetchedResultsController
     }()
     
@@ -64,13 +66,23 @@ class DataManager {
         return pin
     }
     
-    func searchPhotos(pin: Pin, photosCountCallback: (count: Int?, errorMessage: String?) -> Void, photosCallback: (photos: [Photo]?, errorMessage: String?) -> Void) {
+    func searchPhotos(pin: Pin, delegate: NSFetchedResultsControllerDelegate?) {
         NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, callback: { (photosResponse, errorResponse) in
             if let photosResponse = photosResponse {
-                photosCountCallback(count: photosResponse.photos.count, errorMessage: nil)
-
-                //TODO download and save photos
-                //photosCallback(photos: photos, errorMessage: nil)
+                for photoResponse in photosResponse.photos {
+                    var photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
+                    pin.photos = [Photo]()
+                    pin.photos?.append(photo)
+                    NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
+                        if let imageData = imageData {
+                            photo.path = FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
+                        } else {
+                            pin.photos?.removeAtIndex((pin.photos?.indexOf(photo))!)
+                        }
+                        self.coreDataStackManager.saveContext()
+                    })
+                }
+                self.coreDataStackManager.saveContext()
             } else {
                 photosCountCallback(count: nil, errorMessage: errorResponse!.message)
             }

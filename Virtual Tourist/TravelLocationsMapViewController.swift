@@ -30,6 +30,7 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         presenter.onViewVisible()
         mapView.addGestureRecognizer(longPressGestureRecognizer)
         mapView.delegate = self
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {

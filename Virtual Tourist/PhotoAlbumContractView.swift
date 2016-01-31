@@ -23,4 +23,6 @@ protocol PhotoAlbumContractView: NSFetchedResultsControllerDelegate {
     
     func showError(message: String)
     
+    func toggleNewCollectionButton(enable: Bool)
+    
 }

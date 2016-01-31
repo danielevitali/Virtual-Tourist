@@ -41,9 +41,8 @@ class NetworkManager {
         var methodParams = buildDefaultRequestParameters()
         methodParams["bbox"] = createBoundingBoxString(latitude: latitude, longitude: longitude)
         let url = buildUrl(methodParams)
-        executeGetRequest(url, completionHandler: {
-            (data, response, error) in
-            if let response = response, let data = data{
+        executeGetRequest(url, completionHandler: { (data, response, error) in
+            if let response = response, let data = data {
                 let json = self.extractJson(data)
                 if self.isSuccessResponse(response.statusCode) {
                     let response = PhotosResponse(response: json)
@@ -55,6 +54,17 @@ class NetworkManager {
             } else {
                 let errorResponse = ErrorResponse(error: error!)
                 callback(photosResponse: nil, errorResponse: errorResponse)
+            }
+        })
+    }
+    
+    func downloadPhoto(url: NSURL, callback: ((imageData: NSData?, errorResponse: ErrorResponse? ) -> Void)) {
+        executeGetRequest(url, completionHandler: { (data, response, error) in
+            if let data = data {
+                callback(imageData: data, errorResponse: nil)
+            } else {
+                let errorResponse = ErrorResponse(error: error!)
+                callback(imageData: nil, errorResponse: errorResponse)
             }
         })
     }

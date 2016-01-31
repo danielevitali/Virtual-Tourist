@@ -12,13 +12,14 @@ import CoreData
 class Photo: NSManagedObject {
     
     @NSManaged var id: String
-    @NSManaged var path: String
+    @NSManaged var path: String?
+    @NSManaged var url: String
     
-    init(id: String, path: String, context: NSManagedObjectContext) {
+    init(photoResponse: PhotoResponse, context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
         super.init(entity: entity,insertIntoManagedObjectContext: context)
-        self.id = id
-        self.path = path
+        self.id = photoResponse.id
+        self.url = photoResponse.url
     }
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {

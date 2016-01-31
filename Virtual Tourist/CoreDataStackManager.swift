@@ -19,6 +19,11 @@ class CoreDataStackManager {
         return instance
     }
     
+    lazy var pictureDirectory: NSURL = {
+        let urls = NSFileManager.defaultManager().URLsForDirectory(.PicturesDirectory, inDomains: .UserDomainMask)
+        return urls[urls.count-1]
+    }()
+    
     lazy var managedObjectModel: NSManagedObjectModel = {
         let modelURL = NSBundle.mainBundle().URLForResource("Virtual_Tourist", withExtension: "momd")!
         return NSManagedObjectModel(contentsOfURL: modelURL)!

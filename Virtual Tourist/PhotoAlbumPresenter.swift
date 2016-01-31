@@ -21,9 +21,10 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     }
     
     func onViewVisible() {
-        view.showPin(pin, span: 100)
+        view.showPin(pin, span: 1000)
         view.toggleActivityIndicator(true)
         view.hideAlbum()
+        view.toggleNewCollectionButton(false)
         DataManager.getInstance().searchPhotos(pin, photosCountCallback: { (count, errorMessage) -> Void in
             self.photosCount = count
             self.view.toggleActivityIndicator(false)
@@ -35,6 +36,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
             },
             photosCallback: { (photos, errorMessage) -> Void in
                 //TODO show images
+                self.view.toggleNewCollectionButton(true)
         })
     }
     
