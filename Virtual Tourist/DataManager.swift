@@ -66,11 +66,11 @@ class DataManager {
         return pin
     }
     
-    func searchPhotos(pin: Pin, delegate: NSFetchedResultsControllerDelegate?) {
+    func searchPhotos(pin: Pin, delegate: NSFetchedResultsControllerDelegate?, errorCallback: (errorMessage: String) -> Void) {
         NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, callback: { (photosResponse, errorResponse) in
             if let photosResponse = photosResponse {
                 for photoResponse in photosResponse.photos {
-                    var photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
+                    let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
                     pin.photos = [Photo]()
                     pin.photos?.append(photo)
                     NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
@@ -84,7 +84,7 @@ class DataManager {
                 }
                 self.coreDataStackManager.saveContext()
             } else {
-                photosCountCallback(count: nil, errorMessage: errorResponse!.message)
+                errorCallback(errorMessage: errorResponse!.message)
             }
         })
     }

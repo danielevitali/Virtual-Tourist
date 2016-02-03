@@ -17,12 +17,20 @@ protocol PhotoAlbumContractView: NSFetchedResultsControllerDelegate {
     
     func toggleActivityIndicator(visible: Bool)
     
-    func hideAlbum()
+    func hidePhotos()
     
-    func showAlbum(photosCount: Int)
+    func showPhotos()
     
     func showError(message: String)
     
     func toggleNewCollectionButton(enable: Bool)
+    
+    func addPhoto(indexPath: NSIndexPath)
+    
+    func removePhoto(indexPath: NSIndexPath)
+    
+    func movePhoto(fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath)
+    
+    func updatePhoto(photo: Photo, indexPath: NSIndexPath)
     
 }

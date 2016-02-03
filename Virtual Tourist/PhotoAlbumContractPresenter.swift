@@ -7,14 +7,17 @@
 //
 
 import Foundation
+import CoreData
 
 protocol PhotoAlbumContractPresenter {
  
     var view: PhotoAlbumContractView {get}
-    var photosCount: Int? {get}
+    var pin: Pin {get}
     
     func onViewVisible()
     
     func onViewHidden()
+    
+    func photosChanged(photo: Photo, changeType: NSFetchedResultsChangeType, fromIndexPath: NSIndexPath?, toIndexPath: NSIndexPath?)
     
 }

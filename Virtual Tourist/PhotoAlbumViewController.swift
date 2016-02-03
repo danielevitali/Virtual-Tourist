@@ -52,6 +52,22 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
         mapView.addAnnotation(pin)
     }
     
+    func showPhotos() {
+        photosCollection.reloadData()
+        if presenter.pin.photos?.count > 0 {
+            photosCollection.hidden = false
+            lblNoImages.hidden = true
+        } else {
+            photosCollection.hidden = true
+            lblNoImages.hidden = false
+        }
+    }
+    
+    func hidePhotos() {
+        photosCollection.hidden = true
+        lblNoImages.hidden = true
+    }
+    
     func toggleActivityIndicator(visible: Bool) {
         if visible {
             activityIndicator.startAnimating()
@@ -64,28 +80,35 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
         ErrorAlert(message: message).show(self)
     }
     
-    func hideAlbum() {
-        photosCollection.hidden = true
-        lblNoImages.hidden = true
-    }
-    
-    func showAlbum(photosCount: Int) {
-        if photosCount > 0 {
-            photosCollection.hidden = false
-            lblNoImages.hidden = true
-            photosCollection.reloadData()
-        } else {
-            photosCollection.hidden = true
-            lblNoImages.hidden = false
-        }
-    }
-    
     func toggleNewCollectionButton(enable: Bool) {
         btnNewCollection.enabled = enable
     }
     
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        let photo = anObject as! Photo
+        presenter.photosChanged(photo, changeType: type, fromIndexPath: indexPath, toIndexPath: newIndexPath)
+    }
+    
+    func addPhoto(indexPath: NSIndexPath) {
+        photosCollection.insertItemsAtIndexPaths([indexPath])
+    }
+    
+    func removePhoto(indexPath: NSIndexPath) {
+        photosCollection.deleteItemsAtIndexPaths([indexPath])
+    }
+    
+    func movePhoto(fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+        removePhoto(fromIndexPath)
+        addPhoto(toIndexPath)
+    }
+    
+    func updatePhoto(photo: Photo, indexPath: NSIndexPath) {
+        let cell = photosCollection.cellForItemAtIndexPath(indexPath) as! PhotoCell
+        cell.showPhoto(photo)
+    }
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let count = presenter.photosCount {
+        if let count = presenter.pin.photos?.count {
             return count
         }
         return 0
@@ -93,7 +116,7 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photo", forIndexPath: indexPath) as! PhotoCell
-        cell.showPlaceholder()
+        cell.showPhoto(presenter.pin.photos![indexPath.row])
         return cell
     }
     

@@ -13,8 +13,11 @@ class PhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
     
-    func showPlaceholder() {
-        imageView.image = UIImage(named: "photo_placeholder")
+    func showPhoto(photo: Photo) {
+        if let path = photo.path {
+            imageView.image = UIImage(contentsOfFile: path)
+        } else {
+            imageView.image = UIImage(named: "photo_placeholder")
+        }
     }
-    
 }
