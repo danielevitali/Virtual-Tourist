@@ -21,7 +21,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     
     func onViewVisible() {
         view.showPin(pin, span: 1000)
-        if pin.photos != nil {
+        if pin.album.count > 0 {
             view.showPhotos()
             view.toggleActivityIndicator(false)
         } else {
@@ -45,7 +45,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
         case .Delete:
             view.removePhoto(fromIndexPath!)
         case .Update:
-            view.updatePhoto(pin.photos![fromIndexPath!.row], indexPath: fromIndexPath!)
+            view.updatePhoto(pin.album[fromIndexPath!.row], indexPath: fromIndexPath!)
         case .Move:
             view.movePhoto(fromIndexPath!, toIndexPath: toIndexPath!)
         }

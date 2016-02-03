@@ -71,13 +71,13 @@ class DataManager {
             if let photosResponse = photosResponse {
                 for photoResponse in photosResponse.photos {
                     let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
-                    pin.photos = [Photo]()
-                    pin.photos?.append(photo)
+                    pin.album.removeAll()
+                    pin.album.append(photo)
                     NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
                         if let imageData = imageData {
                             photo.path = FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
                         } else {
-                            pin.photos?.removeAtIndex((pin.photos?.indexOf(photo))!)
+                            pin.album.removeAtIndex((pin.album.indexOf(photo))!)
                         }
                         self.coreDataStackManager.saveContext()
                     })

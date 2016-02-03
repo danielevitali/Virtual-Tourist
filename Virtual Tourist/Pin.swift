@@ -15,7 +15,7 @@ class Pin: NSManagedObject, MKAnnotation {
     @NSManaged var id: NSNumber
     @NSManaged var latitude: NSNumber
     @NSManaged var longitude: NSNumber
-    @NSManaged var photos: [Photo]?
+    @NSManaged var album: [Photo]
     
     lazy var coordinate: CLLocationCoordinate2D = {
         return CLLocationCoordinate2D(latitude: self.latitude as Double, longitude: self.longitude as Double)

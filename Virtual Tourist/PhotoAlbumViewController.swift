@@ -54,7 +54,7 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     
     func showPhotos() {
         photosCollection.reloadData()
-        if presenter.pin.photos?.count > 0 {
+        if presenter.pin.album.count > 0 {
             photosCollection.hidden = false
             lblNoImages.hidden = true
         } else {
@@ -108,15 +108,12 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let count = presenter.pin.photos?.count {
-            return count
-        }
-        return 0
+        return presenter.pin.album.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photo", forIndexPath: indexPath) as! PhotoCell
-        cell.showPhoto(presenter.pin.photos![indexPath.row])
+        cell.showPhoto(presenter.pin.album[indexPath.row])
         return cell
     }
     
