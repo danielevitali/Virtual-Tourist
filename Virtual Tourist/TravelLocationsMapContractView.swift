@@ -10,7 +10,7 @@ import Foundation
 import MapKit
 import CoreData
 
-protocol TravelLocationsMapContractView: NSFetchedResultsControllerDelegate {
+protocol TravelLocationsMapContractView {
     
     var presenter: TravelLocationsMapContractPresenter! {get set}
  
@@ -21,4 +21,8 @@ protocol TravelLocationsMapContractView: NSFetchedResultsControllerDelegate {
     func removePin(pin: Pin)
     
     func showPhotoAlbum(pin: Pin)
+    
+    func showPins(pins: [Pin])
+    
+    func showError(message: String)
 }

@@ -60,6 +60,11 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         presenter.onDataChange(pin, forChangeType: type)
     }
     
+    func showPins(pins: [Pin]) {
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotations(pins)
+    }
+    
     func addPin(pin: Pin) {
         mapView.addAnnotation(pin)
     }
@@ -73,6 +78,10 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         let viewController = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbumViewController") as! PhotoAlbumViewController
         viewController.selectedPin = pin
         self.navigationController!.pushViewController(viewController, animated: true)
+    }
+    
+    func showError(message: String) {
+        ErrorAlert(message: message).show(self)
     }
 }
 

@@ -12,7 +12,7 @@ import CoreData
 
 class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     
-    let view: TravelLocationsMapContractView
+    let view: TravelLocationsMapContractView 
     
     init(view: TravelLocationsMapContractView) {
         self.view = view
@@ -23,7 +23,11 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
         if let region = DataManager.getInstance().getLastMapRegion() {
             view.showMapRegion(region)
         }
-        DataManager.getInstance().getPins(view)
+        if let pins = DataManager.getInstance().getPins() {
+            view.showPins(pins)
+        } else {
+            view.showError("Error loading pins on map")
+        }
     }
     
     func onViewHidden() {

@@ -14,6 +14,7 @@ class Photo: NSManagedObject {
     @NSManaged var id: String
     @NSManaged var path: String?
     @NSManaged var url: String
+    @NSManaged var pin: Pin?
     
     init(photoResponse: PhotoResponse, context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!

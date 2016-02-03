@@ -53,11 +53,12 @@ class DataManager {
         }
     }
     
-    func getPins(delegate: NSFetchedResultsControllerDelegate?) {
-        fetchedPinsController.delegate = delegate
+    func getPins() -> [Pin]? {
         do {
             try fetchedPinsController.performFetch()
+            return fetchedPinsController.sections![0].objects as? [Pin]
         } catch {}
+        return nil
     }
     
     func createPin(latitude: Double, longitude: Double) -> Pin {
