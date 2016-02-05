@@ -13,6 +13,7 @@ protocol PhotoAlbumContractPresenter {
  
     var view: PhotoAlbumContractView {get}
     var pin: Pin {get}
+    var fetchedPhotosController: NSFetchedResultsController {get}
     
     func onViewVisible()
     

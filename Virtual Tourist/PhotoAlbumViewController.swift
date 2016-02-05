@@ -54,7 +54,7 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     
     func showPhotos() {
         photosCollection.reloadData()
-        if presenter.pin.album.count > 0 {
+        if photosCollection.numberOfItemsInSection(0) > 0 {
             photosCollection.hidden = false
             lblNoImages.hidden = true
         } else {
@@ -84,6 +84,17 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
         btnNewCollection.enabled = enable
     }
     
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+            switch type {
+            case .Insert:
+                self.photosCollection.insertSections(NSIndexSet(index: sectionIndex))
+            case .Delete:
+                self.photosCollection.deleteSections(NSIndexSet(index: sectionIndex))
+            default:
+                return
+            }
+    }
+    
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         let photo = anObject as! Photo
         presenter.photosChanged(photo, changeType: type, fromIndexPath: indexPath, toIndexPath: newIndexPath)
@@ -108,12 +119,15 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return presenter.pin.album.count
+        if let count = presenter.fetchedPhotosController.sections?[section].numberOfObjects {
+            return count
+        }
+        return 0
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photo", forIndexPath: indexPath) as! PhotoCell
-        cell.showPhoto(presenter.pin.album[indexPath.row])
+        cell.showPhoto(presenter.fetchedPhotosController.objectAtIndexPath(indexPath) as! Photo)
         return cell
     }
     

@@ -18,7 +18,7 @@ class Photo: NSManagedObject {
     
     init(photoResponse: PhotoResponse, context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
-        super.init(entity: entity,insertIntoManagedObjectContext: context)
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
         self.id = photoResponse.id
         self.url = photoResponse.url
     }

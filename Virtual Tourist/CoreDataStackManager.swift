@@ -61,6 +61,10 @@ class CoreDataStackManager {
         return urls[urls.count - 1]
     }
     
+    func deleteObject(object: NSManagedObject) {
+        managedObjectContext.deleteObject(object)
+    }
+    
     func saveContext () {
         if managedObjectContext.hasChanges {
             do {

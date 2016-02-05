@@ -14,7 +14,7 @@ class DataManager {
     
     private static let instance: DataManager = DataManager()
     
-    private let coreDataStackManager: CoreDataStackManager
+    let coreDataStackManager: CoreDataStackManager
     private var currentMapRegion: MapRegion?
     
     lazy var fetchedPinsController: NSFetchedResultsController = {
@@ -67,25 +67,26 @@ class DataManager {
         return pin
     }
     
-    func searchPhotos(pin: Pin, delegate: NSFetchedResultsControllerDelegate?, errorCallback: (errorMessage: String) -> Void) {
+    func searchPhotos(pin: Pin, callback: (errorMessage: String?) -> Void) {
         NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, callback: { (photosResponse, errorResponse) in
             if let photosResponse = photosResponse {
                 for photoResponse in photosResponse.photos {
                     let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
-                    pin.album.removeAll()
-                    pin.album.append(photo)
+                    photo.pin = pin
                     NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
                         if let imageData = imageData {
                             photo.path = FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
                         } else {
+                            self.coreDataStackManager.deleteObject(photo)
                             pin.album.removeAtIndex((pin.album.indexOf(photo))!)
                         }
                         self.coreDataStackManager.saveContext()
                     })
                 }
                 self.coreDataStackManager.saveContext()
+                callback(errorMessage: nil)
             } else {
-                errorCallback(errorMessage: errorResponse!.message)
+                callback(errorMessage: errorResponse!.message)
             }
         })
     }
