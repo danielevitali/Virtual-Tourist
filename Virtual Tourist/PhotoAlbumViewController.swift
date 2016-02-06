@@ -50,6 +50,10 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
         presenter.onViewVisible()
     }
     
+    @IBAction func onNewCollectionClick(sender: AnyObject) {
+        presenter.onNewCollectionClick()
+    }
+    
     func showPin(pin: Pin, span: Double) {
         mapView.removeAnnotations(mapView.annotations)
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(pin.coordinate, span, span)
@@ -164,6 +168,11 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
         let photo = presenter.fetchedPhotosController.objectAtIndexPath(indexPath) as! Photo
         cell.showPhoto(photo)
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let photo = presenter.fetchedPhotosController.objectAtIndexPath(indexPath) as! Photo
+        presenter.onPhotoClick(photo)
     }
     
 }

@@ -68,9 +68,17 @@ class DataManager {
     }
     
     func searchPhotos(pin: Pin) {
-        NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, callback: { (photosResponse, errorResponse) in
+        let page: Int
+        if let totalPagesCount = pin.totalPagesCount as? Int{
+            page = Int(arc4random_uniform(UInt32(totalPagesCount)))
+        } else {
+            page = 0
+        }
+        
+        NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, page: page, callback: { (photosResponse, errorResponse) in
             if let photosResponse = photosResponse {
                 print("Downloaded \(photosResponse.photos.count) photos entities")
+                pin.totalPagesCount = photosResponse.pages
                 for photoResponse in photosResponse.photos {
                     let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
                     photo.pin = pin

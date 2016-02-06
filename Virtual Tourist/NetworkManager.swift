@@ -37,9 +37,11 @@ class NetworkManager {
         sharedSession = NSURLSession.sharedSession()
     }
     
-    func searchPhotos(latitude: Double, longitude: Double, callback: (photosResponse: PhotosResponse?, errorResponse: ErrorResponse?) -> Void) {
+    func searchPhotos(latitude: Double, longitude: Double, page: Int, callback: (photosResponse: PhotosResponse?, errorResponse: ErrorResponse?) -> Void) {
         var methodParams = buildDefaultRequestParameters()
-        methodParams["bbox"] = createBoundingBoxString(latitude: latitude, longitude: longitude)
+        methodParams["lat"] = String(latitude)
+        methodParams["lon"] = String(longitude)
+        methodParams["page"] = String(page)
         let url = buildUrl(methodParams)
         executeGetRequest(url, completionHandler: { (data, response, error) in
             if let response = response, let data = data {
@@ -78,9 +80,9 @@ class NetworkManager {
             "method": NetworkManager.SEARCH_METHOD_NAME,
             "api_key": NetworkManager.API_KEY,
             "format": NetworkManager.DATA_FORMAT,
-            "gallery_id": NetworkManager.GALLERY_ID,
             "nojsoncallback": NetworkManager.NO_JSON_CALLBACK,
-            "extras": NetworkManager.EXTRAS
+            "extras": NetworkManager.EXTRAS,
+            "per_page": "50"
         ]
     }
     

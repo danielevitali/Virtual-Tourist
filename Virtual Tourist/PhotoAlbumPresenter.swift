@@ -17,7 +17,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     lazy var fetchedPhotosController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
-        fetchRequest.predicate = NSPredicate(format: "pin.id = '\(self.pin.id)'")
+        //fetchRequest.predicate = NSPredicate(format: "pin.id = '\(self.pin.id)'")
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: DataManager.getInstance().coreDataStackManager.managedObjectContext,
@@ -56,12 +56,35 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     }
     
     func photosUpdate() {
-        for photo in pin.album {
-            if photo.path == nil {
-                view.toggleNewCollectionButton(false)
-                return
+        if let photos = fetchedPhotosController.fetchedObjects as? [Photo] {
+            for photo in photos {
+                if photo.path == nil {
+                    view.toggleNewCollectionButton(false)
+                    return
+                }
+            }
+            view.toggleNewCollectionButton(true)
+        }
+    }
+    
+    func onNewCollectionClick() {
+        view.toggleActivityIndicator(true)
+        view.hidePhotos()
+        view.toggleNewCollectionButton(false)
+        
+        if let photos = fetchedPhotosController.fetchedObjects as? [Photo] {
+            for photo in photos {
+                photo.deletePhotoFile()
+                DataManager.getInstance().coreDataStackManager.deleteObject(photo)
             }
         }
-        view.toggleNewCollectionButton(true)
+        DataManager.getInstance().coreDataStackManager.saveContext()
+        DataManager.getInstance().searchPhotos(pin)
+    }
+    
+    func onPhotoClick(photo: Photo) {
+        photo.deletePhotoFile()
+        DataManager.getInstance().coreDataStackManager.deleteObject(photo)
+        DataManager.getInstance().coreDataStackManager.saveContext()
     }
 }

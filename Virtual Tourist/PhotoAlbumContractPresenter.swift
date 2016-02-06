@@ -21,4 +21,8 @@ protocol PhotoAlbumContractPresenter {
     
     func photosUpdate()
     
+    func onNewCollectionClick()
+    
+    func onPhotoClick(photo: Photo)
+    
 }
