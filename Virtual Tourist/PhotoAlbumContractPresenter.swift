@@ -19,6 +19,4 @@ protocol PhotoAlbumContractPresenter {
     
     func onViewHidden()
     
-    func photosChanged(photo: Photo, changeType: NSFetchedResultsChangeType, fromIndexPath: NSIndexPath?, toIndexPath: NSIndexPath?)
-    
 }

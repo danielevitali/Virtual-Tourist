@@ -23,6 +23,10 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     var presenter: PhotoAlbumContractPresenter!
     var selectedPin: Pin!
     
+    var insertedIndexPaths: [NSIndexPath]!
+    var deletedIndexPaths: [NSIndexPath]!
+    var updatedIndexPaths: [NSIndexPath]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter = PhotoAlbumPresenter(view: self, pin: selectedPin)
@@ -53,8 +57,7 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     }
     
     func showPhotos() {
-        photosCollection.reloadData()
-        if photosCollection.numberOfItemsInSection(0) > 0 {
+        if presenter.fetchedPhotosController.fetchedObjects?.count ?? 0 > 0 {
             photosCollection.hidden = false
             lblNoImages.hidden = true
         } else {
@@ -84,6 +87,12 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
         btnNewCollection.enabled = enable
     }
     
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        insertedIndexPaths = [NSIndexPath]()
+        deletedIndexPaths = [NSIndexPath]()
+        updatedIndexPaths = [NSIndexPath]()
+    }
+    
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
             switch type {
             case .Insert:
@@ -96,38 +105,76 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        let photo = anObject as! Photo
-        presenter.photosChanged(photo, changeType: type, fromIndexPath: indexPath, toIndexPath: newIndexPath)
+        switch type{
+        case .Insert:
+            print("Insert an item")
+            // Here we are noting that a new Color instance has been added to Core Data. We remember its index path
+            // so that we can add a cell in "controllerDidChangeContent". Note that the "newIndexPath" parameter has
+            // the index path that we want in this case
+            insertedIndexPaths.append(newIndexPath!)
+            break
+        case .Delete:
+            print("Delete an item")
+            // Here we are noting that a Color instance has been deleted from Core Data. We keep remember its index path
+            // so that we can remove the corresponding cell in "controllerDidChangeContent". The "indexPath" parameter has
+            // value that we want in this case.
+            deletedIndexPaths.append(indexPath!)
+            break
+        case .Update:
+            print("Update an item.")
+            // We don't expect Color instances to change after they are created. But Core Data would
+            // notify us of changes if any occured. This can be useful if you want to respond to changes
+            // that come about after data is downloaded. For example, when an images is downloaded from
+            // Flickr in the Virtual Tourist app
+            updatedIndexPaths.append(indexPath!)
+            break
+        case .Move:
+            print("Move an item. We don't expect to see this in this app.")
+            break
+        }
     }
     
-    func addPhoto(indexPath: NSIndexPath) {
-        photosCollection.insertItemsAtIndexPaths([indexPath])
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        
+        print("in controllerDidChangeContent. changes.count: \(insertedIndexPaths.count + deletedIndexPaths.count)")
+        toggleActivityIndicator(false)
+        showPhotos()
+        photosCollection.performBatchUpdates({() -> Void in
+            
+            if self.photosCollection.numberOfSections() == 0 {
+                self.photosCollection.insertSections(NSIndexSet(index: 0))
+            }
+            
+            for indexPath in self.insertedIndexPaths {
+                self.photosCollection.insertItemsAtIndexPaths([indexPath])
+            }
+            
+            for indexPath in self.deletedIndexPaths {
+                self.photosCollection.deleteItemsAtIndexPaths([indexPath])
+            }
+            
+            for indexPath in self.updatedIndexPaths {
+                self.photosCollection.reloadItemsAtIndexPaths([indexPath])
+            }
+            
+            }, completion: nil)
     }
     
-    func removePhoto(indexPath: NSIndexPath) {
-        photosCollection.deleteItemsAtIndexPaths([indexPath])
-    }
-    
-    func movePhoto(fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-        removePhoto(fromIndexPath)
-        addPhoto(toIndexPath)
-    }
-    
-    func updatePhoto(photo: Photo, indexPath: NSIndexPath) {
-        let cell = photosCollection.cellForItemAtIndexPath(indexPath) as! PhotoCell
-        cell.showPhoto(photo)
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return presenter.fetchedPhotosController.sections?.count ?? 0
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let count = presenter.fetchedPhotosController.sections?[section].numberOfObjects {
-            return count
-        }
-        return 0
+        let sectionInfo = presenter.fetchedPhotosController.sections![section]
+        return sectionInfo.numberOfObjects
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photo", forIndexPath: indexPath) as! PhotoCell
-        cell.showPhoto(presenter.fetchedPhotosController.objectAtIndexPath(indexPath) as! Photo)
+        let photo = presenter.fetchedPhotosController.objectAtIndexPath(indexPath) as! Photo
+        print("Photo \(photo.id) with URL \(photo.url) has path \(photo.path)")
+        print("-------------------------------------------------------")
+        cell.showPhoto(photo)
         return cell
     }
     

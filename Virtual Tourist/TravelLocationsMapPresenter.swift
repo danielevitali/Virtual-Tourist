@@ -12,7 +12,7 @@ import CoreData
 
 class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     
-    let view: TravelLocationsMapContractView 
+    let view: TravelLocationsMapContractView
     
     init(view: TravelLocationsMapContractView) {
         self.view = view

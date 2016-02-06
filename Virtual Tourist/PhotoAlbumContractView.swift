@@ -25,12 +25,4 @@ protocol PhotoAlbumContractView: NSFetchedResultsControllerDelegate {
     
     func toggleNewCollectionButton(enable: Bool)
     
-    func addPhoto(indexPath: NSIndexPath)
-    
-    func removePhoto(indexPath: NSIndexPath)
-    
-    func movePhoto(fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath)
-    
-    func updatePhoto(photo: Photo, indexPath: NSIndexPath)
-    
 }

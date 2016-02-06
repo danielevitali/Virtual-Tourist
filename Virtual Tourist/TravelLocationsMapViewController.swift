@@ -44,7 +44,7 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         let mapSize = MKMapSize(width: region.width, height: region.height)
         let mapRect = MKMapRect(origin: mapPoint, size: mapSize)
         let coordinateRegion = MKCoordinateRegionForMapRect(mapRect)
-        mapView.setRegion(coordinateRegion, animated: true)
+        mapView.setRegion(coordinateRegion, animated: false)
     }
     
     func handleLongPressGesture(sender: UILongPressGestureRecognizer) {

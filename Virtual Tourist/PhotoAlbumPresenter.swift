@@ -60,18 +60,4 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     func onViewHidden() {
         
     }
-    
-    func photosChanged(photo: Photo, changeType: NSFetchedResultsChangeType, fromIndexPath: NSIndexPath?, toIndexPath: NSIndexPath?) {
-        switch changeType {
-        case .Insert:
-            view.addPhoto(toIndexPath!)
-        case .Delete:
-            view.removePhoto(fromIndexPath!)
-        case .Update:
-            let photo = fetchedPhotosController.objectAtIndexPath(fromIndexPath!) as! Photo
-            view.updatePhoto(photo, indexPath: fromIndexPath!)
-        case .Move:
-            view.movePhoto(fromIndexPath!, toIndexPath: toIndexPath!)
-        }
-    }
 }
