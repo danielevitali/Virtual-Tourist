@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="QWm-H7-U1a">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="QWm-H7-U1a">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -46,7 +46,9 @@
                             <constraint firstAttribute="trailing" secondItem="mKY-Xw-YiG" secondAttribute="trailing" id="acC-mb-eyr"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="r7N-Cv-cJu"/>
+                    <navigationItem key="navigationItem" id="r7N-Cv-cJu">
+                        <barButtonItem key="backBarButtonItem" title="OK" id="GTi-B5-1UR"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="mKY-Xw-YiG" id="3b2-IK-s82"/>
                         <segue destination="uWb-fI-CY7" kind="show" identifier="photoAlbumSegue" id="wkv-C7-9D7"/>
@@ -68,20 +70,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIu-Tw-kSb">
-                                <rect key="frame" x="0.0" y="20" width="600" height="180"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="180" id="y4F-3R-DnT"/>
-                                </constraints>
-                            </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Images" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WRc-PN-OwT">
-                                <rect key="frame" x="259" y="365" width="82" height="20.5"/>
+                                <rect key="frame" x="259" y="387" width="82" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9i3-pc-vgf">
-                                <rect key="frame" x="290" y="365" width="20" height="20"/>
+                                <rect key="frame" x="290" y="387" width="20" height="20"/>
                             </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3nV-Tu-qsz">
                                 <rect key="frame" x="0.0" y="550" width="600" height="50"/>
@@ -92,7 +88,7 @@
                                 <state key="normal" title="New Collection"/>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="618-AL-tsg">
-                                <rect key="frame" x="0.0" y="200" width="600" height="350"/>
+                                <rect key="frame" x="0.0" y="244" width="600" height="306"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HT8-rl-jds">
                                     <size key="itemSize" width="141" height="133"/>
@@ -130,6 +126,12 @@
                                     <outlet property="delegate" destination="uWb-fI-CY7" id="DdZ-fu-Qu6"/>
                                 </connections>
                             </collectionView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsBuildings="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIu-Tw-kSb">
+                                <rect key="frame" x="0.0" y="64" width="600" height="180"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="y4F-3R-DnT"/>
+                                </constraints>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>

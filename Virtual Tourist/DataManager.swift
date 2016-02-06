@@ -67,26 +67,25 @@ class DataManager {
         return pin
     }
     
-    func searchPhotos(pin: Pin, callback: (errorMessage: String?) -> Void) {
+    func searchPhotos(pin: Pin) {
         NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, callback: { (photosResponse, errorResponse) in
             if let photosResponse = photosResponse {
+                print("Downloaded \(photosResponse.photos.count) photos entities")
                 for photoResponse in photosResponse.photos {
                     let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
                     photo.pin = pin
                     NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
                         if let imageData = imageData {
                             photo.path = FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
+                            print("Saved photo \(photo.id)")
                         } else {
+                            print("Removed photo \(photo.id)")
                             self.coreDataStackManager.deleteObject(photo)
-                            pin.album.removeAtIndex((pin.album.indexOf(photo))!)
                         }
                         self.coreDataStackManager.saveContext()
                     })
                 }
                 self.coreDataStackManager.saveContext()
-                callback(errorMessage: nil)
-            } else {
-                callback(errorMessage: errorResponse!.message)
             }
         })
     }

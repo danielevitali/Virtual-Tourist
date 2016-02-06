@@ -25,4 +25,6 @@ protocol PhotoAlbumContractView: NSFetchedResultsControllerDelegate {
     
     func toggleNewCollectionButton(enable: Bool)
     
+    func reloadPhotos()
+    
 }

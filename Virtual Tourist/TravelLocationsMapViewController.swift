@@ -80,6 +80,10 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         self.navigationController!.pushViewController(viewController, animated: true)
     }
     
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        presenter.onPinClick(view.annotation as! Pin)
+    }
+    
     func showError(message: String) {
         ErrorAlert(message: message).show(self)
     }

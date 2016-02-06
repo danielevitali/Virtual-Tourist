@@ -52,6 +52,7 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     func onLongClickOnMap(latitude: Double, longitude: Double) {
         let pin = DataManager.getInstance().createPin(latitude, longitude: longitude)
         view.addPin(pin)
+        DataManager.getInstance().searchPhotos(pin)
         view.showPhotoAlbum(pin)
     }
     

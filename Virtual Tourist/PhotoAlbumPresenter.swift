@@ -17,7 +17,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     lazy var fetchedPhotosController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
-        //fetchRequest.predicate = NSPredicate(format: "pin.id = '\(self.pin.id)'")
+        fetchRequest.predicate = NSPredicate(format: "pin.id = '\(self.pin.id)'")
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: DataManager.getInstance().coreDataStackManager.managedObjectContext,
@@ -34,30 +34,34 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     }
     
     func onViewVisible() {
+        view.showPin(pin, span: 1000)
+        
+        view.toggleActivityIndicator(true)
+        view.hidePhotos()
+        view.toggleNewCollectionButton(false)
+        
         do {
             try fetchedPhotosController.performFetch()
         } catch {}
         
-        view.showPin(pin, span: 1000)
-        if !pin.album.isEmpty {
+        if let photos = fetchedPhotosController.fetchedObjects where !photos.isEmpty {
+            view.reloadPhotos()
             view.showPhotos()
-            view.toggleActivityIndicator(false)
-        } else {
-            view.toggleActivityIndicator(true)
-            view.hidePhotos()
-            view.toggleNewCollectionButton(false)
-            DataManager.getInstance().searchPhotos(pin, callback: { errorMessage in
-                if let errorMessage = errorMessage {
-                    self.view.showError(errorMessage)
-                } else {
-                    self.view.showPhotos()
-                    self.view.toggleActivityIndicator(false)
-                }
-            })
+            view.toggleNewCollectionButton(true)
         }
     }
     
     func onViewHidden() {
         
+    }
+    
+    func photosUpdate() {
+        for photo in pin.album {
+            if photo.path == nil {
+                view.toggleNewCollectionButton(false)
+                return
+            }
+        }
+        view.toggleNewCollectionButton(true)
     }
 }

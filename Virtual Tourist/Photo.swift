@@ -26,4 +26,13 @@ class Photo: NSManagedObject {
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
+    
+    func deletePhotoFile() {
+        if let path = path {
+            let filemgr = NSFileManager.defaultManager()
+            do {
+                try filemgr.removeItemAtPath(path)
+            } catch {}
+        }
+    }
 }

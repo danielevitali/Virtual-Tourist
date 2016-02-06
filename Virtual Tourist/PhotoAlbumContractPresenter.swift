@@ -19,4 +19,6 @@ protocol PhotoAlbumContractPresenter {
     
     func onViewHidden()
     
+    func photosUpdate()
+    
 }
