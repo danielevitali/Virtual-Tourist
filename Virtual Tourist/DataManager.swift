@@ -69,7 +69,7 @@ class DataManager {
     
     func searchPhotos(pin: Pin) {
         let page: Int
-        if let totalPagesCount = pin.totalPagesCount as? Int{
+        if let totalPagesCount = pin.totalPagesCount as? Int{ 
             page = Int(arc4random_uniform(UInt32(totalPagesCount)))
         } else {
             page = 0
