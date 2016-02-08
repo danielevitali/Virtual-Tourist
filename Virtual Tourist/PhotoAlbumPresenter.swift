@@ -78,6 +78,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
                 DataManager.getInstance().coreDataStackManager.deleteObject(photo)
             }
         }
+        
         DataManager.getInstance().coreDataStackManager.saveContext()
         DataManager.getInstance().searchPhotos(pin)
     }

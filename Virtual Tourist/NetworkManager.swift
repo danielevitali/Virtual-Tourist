@@ -82,7 +82,8 @@ class NetworkManager {
             "format": NetworkManager.DATA_FORMAT,
             "nojsoncallback": NetworkManager.NO_JSON_CALLBACK,
             "extras": NetworkManager.EXTRAS,
-            "per_page": "50"
+            "per_page": "50",
+            "radius": "10"
         ]
     }
     

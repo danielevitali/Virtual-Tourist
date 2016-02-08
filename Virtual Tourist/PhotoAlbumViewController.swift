@@ -130,9 +130,6 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        toggleActivityIndicator(false)
-        showPhotos()
-        presenter.photosUpdate()
         photosCollection.performBatchUpdates({() -> Void in
             
             if self.photosCollection.numberOfSections() == 0 {
@@ -141,6 +138,9 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
             
             for indexPath in self.insertedIndexPaths {
                 self.photosCollection.insertItemsAtIndexPaths([indexPath])
+                self.presenter.photosUpdate()
+                self.showPhotos()
+                self.toggleActivityIndicator(false)
             }
             
             for indexPath in self.deletedIndexPaths {
@@ -149,6 +149,7 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
             
             for indexPath in self.updatedIndexPaths {
                 self.photosCollection.reloadItemsAtIndexPaths([indexPath])
+                self.presenter.photosUpdate()
             }
             
             }, completion: nil)
