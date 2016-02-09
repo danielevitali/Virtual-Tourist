@@ -76,25 +76,29 @@ class DataManager {
         }
         
         NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, page: page, callback: { (photosResponse, errorResponse) in
-            if let photosResponse = photosResponse {
-                print("Downloaded \(photosResponse.photos.count) photos entities")
-                pin.totalPagesCount = photosResponse.pages
-                for photoResponse in photosResponse.photos {
-                    let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
-                    photo.pin = pin
-                    NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
-                        if let imageData = imageData {
-                            photo.path = FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
-                            print("Saved photo \(photo.id)")
-                        } else {
-                            print("Removed photo \(photo.id)")
-                            self.coreDataStackManager.deleteObject(photo)
-                        }
-                        self.coreDataStackManager.saveContext()
-                    })
+            dispatch_async(dispatch_get_main_queue(), {
+                if let photosResponse = photosResponse {
+                    print("Downloaded \(photosResponse.photos.count) photos entities")
+                    pin.totalPagesCount = photosResponse.pages
+                    for photoResponse in photosResponse.photos {
+                        let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
+                        photo.pin = pin
+                        NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
+                            dispatch_async(dispatch_get_main_queue(), {
+                                if let imageData = imageData {
+                                    photo.path = FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
+                                    print("Saved photo \(photo.id)")
+                                } else {
+                                    print("Removed photo \(photo.id)")
+                                    self.coreDataStackManager.deleteObject(photo)
+                                }
+                                self.coreDataStackManager.saveContext()
+                            })
+                        })
+                    }
+                    self.coreDataStackManager.saveContext()
                 }
-                self.coreDataStackManager.saveContext()
-            }
+            })
         })
     }
 }

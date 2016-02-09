@@ -19,8 +19,9 @@ class FileSystemManager {
     private init(){}
     
     func savePhoto(fileName: String, imageData: NSData) -> String? {
-        let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first!
-        let path = directory.stringByAppendingString(fileName)
+        let manager = NSFileManager.defaultManager()
+        let url = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+        let path = url.URLByAppendingPathComponent(fileName).path!
         let success = imageData.writeToFile(path, atomically: true)
         if !success {
             return nil
