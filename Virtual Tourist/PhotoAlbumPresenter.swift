@@ -17,7 +17,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     lazy var fetchedPhotosController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
-        //fetchRequest.predicate = NSPredicate(format: "pin.id = '\(self.pin.id)'")
+        fetchRequest.predicate = NSPredicate(format: "pin.id = %s", self.pin.id)
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: DataManager.getInstance().coreDataStackManager.managedObjectContext,
