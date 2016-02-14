@@ -65,6 +65,7 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
             view = MKPinAnnotationView(annotation: pin, reuseIdentifier: "pin")
             view!.canShowCallout = false
             view!.draggable = true
+            view!.animatesDrop = true
         } else {
             view!.annotation = pin
         }

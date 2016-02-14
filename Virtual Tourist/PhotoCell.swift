@@ -16,10 +16,8 @@ class PhotoCell: UICollectionViewCell {
     func showPhoto(photo: Photo) {
         if let fileName = photo.fileName {
             imageView.image = UIImage(contentsOfFile: FileSystemManager.getInstance().getPhotoPath(fileName))
-            print("Show photo \(photo.id)")
         } else {
             imageView.image = UIImage(named: "photo_placeholder")
-            print("Show placeholder for photo \(photo.id)")
         }
     }
 }

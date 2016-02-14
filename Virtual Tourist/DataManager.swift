@@ -68,12 +68,9 @@ class DataManager {
     }
     
     func searchPhotos(location: Location) {
-        print("Requesting page \(location.nextPage)")
-        
         NetworkManager.getInstance().searchPhotos(location.latitude as Double, longitude: location.longitude as Double, page: location.nextPage as Int, callback: { (photosResponse, errorResponse) in
             dispatch_async(dispatch_get_main_queue(), {
                 if let photosResponse = photosResponse {
-                    print("Downloaded \(photosResponse.photos.count) photos entities")
                     location.nextPage = (photosResponse.page + 1) % photosResponse.pages
                     for photoResponse in photosResponse.photos {
                         let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
@@ -83,9 +80,7 @@ class DataManager {
                                 if let imageData = imageData {
                                     FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
                                     photo.fileName = photo.id
-                                    print("Saved photo \(photo.id)")
                                 } else {
-                                    print("Removed photo \(photo.id)")
                                     self.coreDataStackManager.deleteObject(photo)
                                 }
                                 self.coreDataStackManager.saveContext()

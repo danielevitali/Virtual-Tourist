@@ -84,7 +84,7 @@ class NetworkManager {
             "nojsoncallback": NetworkManager.NO_JSON_CALLBACK,
             "extras": NetworkManager.EXTRAS,
             "per_page": "60",
-            "radius": "10"
+            "radius": "5"
         ]
     }
     
