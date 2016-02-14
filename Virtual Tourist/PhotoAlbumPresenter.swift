@@ -12,12 +12,12 @@ import CoreData
 class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     
     let view: PhotoAlbumContractView    
-    let pin: Pin
+    let location: Location
     
     lazy var fetchedPhotosController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
-        fetchRequest.predicate = NSPredicate(format: "pin.id = %s", self.pin.id)
+        fetchRequest.predicate = NSPredicate(format: "location = %@", self.location)
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: DataManager.getInstance().coreDataStackManager.managedObjectContext,
@@ -27,14 +27,14 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
         return fetchedResultsController
     }()
     
-    init(view: PhotoAlbumContractView, pin: Pin) {
+    init(view: PhotoAlbumContractView, location: Location) {
         self.view = view
-        self.pin = pin
+        self.location = location
         self.fetchedPhotosController.delegate = view
     }
     
     func onViewVisible() {
-        view.showPin(pin, span: 1000)
+        view.showPin(location, span: 1000)
         
         view.toggleActivityIndicator(true)
         view.hidePhotos()
@@ -80,7 +80,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
         }
         
         DataManager.getInstance().coreDataStackManager.saveContext()
-        DataManager.getInstance().searchPhotos(pin)
+        DataManager.getInstance().searchPhotos(location)
     }
     
     func onPhotoClick(photo: Photo) {

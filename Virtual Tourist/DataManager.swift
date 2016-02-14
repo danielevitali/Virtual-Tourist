@@ -17,8 +17,8 @@ class DataManager {
     let coreDataStackManager: CoreDataStackManager
     private var currentMapRegion: MapRegion?
     
-    lazy var fetchedPinsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: "Pin")
+    lazy var fetchedLocationsController: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: "Location")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
@@ -53,36 +53,38 @@ class DataManager {
         }
     }
     
-    func getPins() -> [Pin]? {
+    func getLocations() -> [Location]? {
         do {
-            try fetchedPinsController.performFetch()
-            return fetchedPinsController.sections![0].objects as? [Pin]
-        } catch {}
+            try fetchedLocationsController.performFetch()
+            return fetchedLocationsController.sections![0].objects! as? [Location]
+        } catch {
+            print("Error info: \(error)")
+        }
         return nil
     }
     
-    func createPin(latitude: Double, longitude: Double) -> Pin {
-        let pin = Pin(latitude: latitude, longitude: longitude, context: coreDataStackManager.managedObjectContext)
+    func createLocation(latitude: Double, longitude: Double) -> Location {
+        let location = Location(latitude: latitude, longitude: longitude, context: coreDataStackManager.managedObjectContext)
         coreDataStackManager.saveContext()
-        return pin
+        return location
     }
     
-    func searchPhotos(pin: Pin) {
+    func searchPhotos(location: Location) {
         let page: Int
-        if let totalPagesCount = pin.totalPagesCount as? Int{
+        if let totalPagesCount = location.totalPagesCount as? Int{
             page = Int(arc4random_uniform(UInt32(totalPagesCount)))
         } else {
             page = 0
         }
         
-        NetworkManager.getInstance().searchPhotos(pin.latitude as Double, longitude: pin.longitude as Double, page: page, callback: { (photosResponse, errorResponse) in
+        NetworkManager.getInstance().searchPhotos(location.latitude as Double, longitude: location.longitude as Double, page: page, callback: { (photosResponse, errorResponse) in
             dispatch_async(dispatch_get_main_queue(), {
                 if let photosResponse = photosResponse {
                     print("Downloaded \(photosResponse.photos.count) photos entities")
-                    pin.totalPagesCount = photosResponse.pages
+                    location.totalPagesCount = photosResponse.pages
                     for photoResponse in photosResponse.photos {
                         let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
-                        photo.pin = pin
+                        photo.location = location
                         NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
                             dispatch_async(dispatch_get_main_queue(), {
                                 if let imageData = imageData {

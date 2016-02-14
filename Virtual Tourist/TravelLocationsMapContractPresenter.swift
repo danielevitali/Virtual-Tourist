@@ -13,17 +13,13 @@ import CoreData
 protocol TravelLocationsMapContractPresenter {
     
     var view: TravelLocationsMapContractView {get}
-
-    func onViewVisible()
-    
-    func onViewHidden()
     
     func onMapRegionChanged(region: MapRegion)
     
-    func onDataChange(pin: Pin, forChangeType type: NSFetchedResultsChangeType)
+    func onLongClickOnMapBegin(latitude: Double, longitude: Double)
     
-    func onLongClickOnMap(latitude: Double, longitude: Double)
+    func onLongClickOnMapEnd()
     
-    func onPinClick(pin: Pin)
+    func onPinClick(pin: MKAnnotationView)
     
 }

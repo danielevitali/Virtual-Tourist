@@ -15,7 +15,6 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     @IBOutlet weak var mapView: MKMapView!
     
     var presenter: TravelLocationsMapContractPresenter!
-    var selectedPin: Pin!
     var longPressGestureRecognizer: UILongPressGestureRecognizer!
     
     override func viewDidLoad() {
@@ -27,7 +26,6 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        presenter.onViewVisible()
         mapView.addGestureRecognizer(longPressGestureRecognizer)
         mapView.delegate = self
         navigationController?.setNavigationBarHidden(true, animated: true)
@@ -47,41 +45,52 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         mapView.setRegion(coordinateRegion, animated: false)
     }
     
-    func handleLongPressGesture(sender: UILongPressGestureRecognizer) {
-        if sender.state != .Ended {
-            let point = sender.locationInView(mapView)
-            let coordinates = mapView.convertPoint(point, toCoordinateFromView:mapView)
-            presenter.onLongClickOnMap(coordinates.latitude, longitude: coordinates.longitude)
+    func showPins(locations: [Location]) {
+        mapView.removeAnnotations(mapView.annotations)
+        for location in locations {
+            let pin = addPin(location.latitude as Double, longitude: location.longitude as Double, draggable: false)
+            location.pin = pin
         }
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        let pin = anObject as! Pin
-        presenter.onDataChange(pin, forChangeType: type)
+    func addPin(latitude: Double, longitude: Double, draggable: Bool) -> MKAnnotationView{
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let annotationView = MKAnnotationView()
+        annotationView.annotation = annotation
+        annotationView.draggable = draggable
+        mapView.addAnnotation(annotation)
+        return annotationView
     }
     
-    func showPins(pins: [Pin]) {
-        mapView.removeAnnotations(mapView.annotations)
-        mapView.addAnnotations(pins)
+    func removePin(pin: MKAnnotationView) {
+        mapView.removeAnnotation(pin.annotation!)
     }
     
-    func addPin(pin: Pin) {
-        mapView.addAnnotation(pin)
-    }
-    
-    func removePin(pin: Pin) {
-        mapView.removeAnnotation(pin)
-    }
-    
-    func showPhotoAlbum(pin: Pin) {
-        mapView.removeGestureRecognizer(longPressGestureRecognizer)
-        let viewController = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbumViewController") as! PhotoAlbumViewController
-        viewController.selectedPin = pin
-        self.navigationController!.pushViewController(viewController, animated: true)
+    func handleLongPressGesture(sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .Began:
+            let point = sender.locationInView(mapView)
+            let coordinates = mapView.convertPoint(point, toCoordinateFromView:mapView)
+            presenter.onLongClickOnMapBegin(coordinates.latitude, longitude: coordinates.longitude)
+            break;
+        case .Ended, .Cancelled:
+            presenter.onLongClickOnMapEnd()
+            break;
+        default:
+            break;
+        }
     }
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        presenter.onPinClick(view.annotation as! Pin)
+        presenter.onPinClick(view)
+    }
+    
+    func showPhotoAlbum(location: Location) {
+        mapView.removeGestureRecognizer(longPressGestureRecognizer)
+        let viewController = storyboard!.instantiateViewControllerWithIdentifier("PhotoAlbumViewController") as! PhotoAlbumViewController
+        viewController.selectedLocation = location
+        self.navigationController!.pushViewController(viewController, animated: true)
     }
     
     func showError(message: String) {

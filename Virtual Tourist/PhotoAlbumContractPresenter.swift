@@ -12,7 +12,7 @@ import CoreData
 protocol PhotoAlbumContractPresenter {
  
     var view: PhotoAlbumContractView {get}
-    var pin: Pin {get}
+    var location: Location {get}
     var fetchedPhotosController: NSFetchedResultsController {get}
     
     func onViewVisible()

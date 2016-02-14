@@ -21,7 +21,7 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     @IBOutlet weak var btnNewCollection: UIButton!
     
     var presenter: PhotoAlbumContractPresenter!
-    var selectedPin: Pin!
+    var selectedLocation: Location!
     
     var insertedIndexPaths: [NSIndexPath]!
     var deletedIndexPaths: [NSIndexPath]!
@@ -29,7 +29,7 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter = PhotoAlbumPresenter(view: self, pin: selectedPin)
+        presenter = PhotoAlbumPresenter(view: self, location: selectedLocation)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -54,11 +54,18 @@ class PhotoAlbumViewController: UIViewController, PhotoAlbumContractView, UIColl
         presenter.onNewCollectionClick()
     }
     
-    func showPin(pin: Pin, span: Double) {
+    func showPin(location: Location, span: Double) {
         mapView.removeAnnotations(mapView.annotations)
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(pin.coordinate, span, span)
+        let coordinates = CLLocationCoordinate2D(latitude: location.latitude as Double, longitude: location.longitude as Double)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(coordinates, span, span)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinates
+        let annotationView = MKAnnotationView()
+        annotationView.annotation = annotation
+        annotationView.draggable = true
         mapView.setRegion(coordinateRegion, animated: false)
-        mapView.addAnnotation(pin)
+        mapView.addAnnotation(annotation)
     }
     
     func showPhotos() {

@@ -13,7 +13,7 @@ protocol PhotoAlbumContractView: NSFetchedResultsControllerDelegate {
     
     var presenter: PhotoAlbumContractPresenter! {get set}
     
-    func showPin(pin: Pin, span: Double)
+    func showPin(location: Location, span: Double)
     
     func toggleActivityIndicator(visible: Bool)
     

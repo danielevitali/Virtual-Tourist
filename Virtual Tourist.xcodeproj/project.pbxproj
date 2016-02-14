@@ -20,7 +20,6 @@
 		6420C9EC1C53BB9F004B4D7B /* PhotoAlbumContractView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6420C9EB1C53BB9F004B4D7B /* PhotoAlbumContractView.swift */; };
 		6420C9EE1C53BBB6004B4D7B /* PhotoAlbumContractPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6420C9ED1C53BBB6004B4D7B /* PhotoAlbumContractPresenter.swift */; };
 		6420C9F01C53BBC7004B4D7B /* PhotoAlbumPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6420C9EF1C53BBC7004B4D7B /* PhotoAlbumPresenter.swift */; };
-		6420C9F21C53BCDA004B4D7B /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6420C9F11C53BCDA004B4D7B /* Pin.swift */; };
 		6420C9F41C53BDB7004B4D7B /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6420C9F31C53BDB7004B4D7B /* Photo.swift */; };
 		6420C9F61C53C1A4004B4D7B /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6420C9F51C53C1A4004B4D7B /* DataManager.swift */; };
 		6420C9F91C53C4AE004B4D7B /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6420C9F81C53C4AE004B4D7B /* SettingsManager.swift */; };
@@ -33,6 +32,7 @@
 		648CF92E1C5D1E8500FC1A49 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648CF92D1C5D1E8500FC1A49 /* ErrorAlert.swift */; };
 		648CF9301C5D206300FC1A49 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648CF92F1C5D206300FC1A49 /* PhotoCell.swift */; };
 		648CF9331C5E32F100FC1A49 /* FileSystemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648CF9321C5E32F100FC1A49 /* FileSystemManager.swift */; };
+		64FF73301C709FD90048C319 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FF732F1C709FD90048C319 /* Location.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +51,6 @@
 		6420C9EB1C53BB9F004B4D7B /* PhotoAlbumContractView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumContractView.swift; sourceTree = "<group>"; };
 		6420C9ED1C53BBB6004B4D7B /* PhotoAlbumContractPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumContractPresenter.swift; sourceTree = "<group>"; };
 		6420C9EF1C53BBC7004B4D7B /* PhotoAlbumPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumPresenter.swift; sourceTree = "<group>"; };
-		6420C9F11C53BCDA004B4D7B /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		6420C9F31C53BDB7004B4D7B /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		6420C9F51C53C1A4004B4D7B /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		6420C9F81C53C4AE004B4D7B /* SettingsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
@@ -64,6 +63,7 @@
 		648CF92D1C5D1E8500FC1A49 /* ErrorAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
 		648CF92F1C5D206300FC1A49 /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		648CF9321C5E32F100FC1A49 /* FileSystemManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileSystemManager.swift; sourceTree = "<group>"; };
+		64FF732F1C709FD90048C319 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,9 +122,9 @@
 		6420C9DD1C53B8C7004B4D7B /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				6420C9F11C53BCDA004B4D7B /* Pin.swift */,
 				6420C9F31C53BDB7004B4D7B /* Photo.swift */,
 				6420C9FA1C53D1D7004B4D7B /* MapRegion.swift */,
+				64FF732F1C709FD90048C319 /* Location.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -305,7 +305,6 @@
 			files = (
 				6420C9F41C53BDB7004B4D7B /* Photo.swift in Sources */,
 				6420C9EE1C53BBB6004B4D7B /* PhotoAlbumContractPresenter.swift in Sources */,
-				6420C9F21C53BCDA004B4D7B /* Pin.swift in Sources */,
 				648CF9271C5D102400FC1A49 /* PhotosResponse.swift in Sources */,
 				6420C9EA1C53BB69004B4D7B /* TravelLocationsMapPresenter.swift in Sources */,
 				6420C9F91C53C4AE004B4D7B /* SettingsManager.swift in Sources */,
@@ -313,6 +312,7 @@
 				6420C9F01C53BBC7004B4D7B /* PhotoAlbumPresenter.swift in Sources */,
 				6420C9FB1C53D1D7004B4D7B /* MapRegion.swift in Sources */,
 				6420C9E41C53BB06004B4D7B /* TravelLocationsMapContractView.swift in Sources */,
+				64FF73301C709FD90048C319 /* Location.swift in Sources */,
 				6420C9FE1C54095F004B4D7B /* CoreDataStackManager.swift in Sources */,
 				648CF9211C5CFFD300FC1A49 /* NetworkManager.swift in Sources */,
 				6420C9EC1C53BB9F004B4D7B /* PhotoAlbumContractView.swift in Sources */,
