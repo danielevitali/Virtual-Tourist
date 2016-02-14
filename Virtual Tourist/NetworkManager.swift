@@ -10,7 +10,7 @@ import Foundation
 
 class NetworkManager {
     
-    private static let BASE_URL = "https://api.flickr.com/services/rest"
+    private static let BASE_URL = "https://api.flickr.com/services/rest/"
     private static let SEARCH_METHOD_NAME = "flickr.photos.search"
     private static let API_KEY = "0a0e10c407bc913ac05501cc1656648d"
     private static let GALLERY_ID = "5704-72157622566655097"
@@ -43,6 +43,7 @@ class NetworkManager {
         methodParams["lon"] = String(longitude)
         methodParams["page"] = String(page)
         let url = buildUrl(methodParams)
+        print(url)
         executeGetRequest(url, completionHandler: { (data, response, error) in
             if let response = response, let data = data {
                 let json = self.extractJson(data)
@@ -82,7 +83,7 @@ class NetworkManager {
             "format": NetworkManager.DATA_FORMAT,
             "nojsoncallback": NetworkManager.NO_JSON_CALLBACK,
             "extras": NetworkManager.EXTRAS,
-            "per_page": "50",
+            "per_page": "60",
             "radius": "10"
         ]
     }

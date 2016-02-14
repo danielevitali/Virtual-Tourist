@@ -57,9 +57,7 @@ class DataManager {
         do {
             try fetchedLocationsController.performFetch()
             return fetchedLocationsController.sections![0].objects! as? [Location]
-        } catch {
-            print("Error info: \(error)")
-        }
+        } catch {}
         return nil
     }
     
@@ -70,25 +68,21 @@ class DataManager {
     }
     
     func searchPhotos(location: Location) {
-        let page: Int
-        if let totalPagesCount = location.totalPagesCount as? Int{
-            page = Int(arc4random_uniform(UInt32(totalPagesCount)))
-        } else {
-            page = 0
-        }
+        print("Requesting page \(location.nextPage)")
         
-        NetworkManager.getInstance().searchPhotos(location.latitude as Double, longitude: location.longitude as Double, page: page, callback: { (photosResponse, errorResponse) in
+        NetworkManager.getInstance().searchPhotos(location.latitude as Double, longitude: location.longitude as Double, page: location.nextPage as Int, callback: { (photosResponse, errorResponse) in
             dispatch_async(dispatch_get_main_queue(), {
                 if let photosResponse = photosResponse {
                     print("Downloaded \(photosResponse.photos.count) photos entities")
-                    location.totalPagesCount = photosResponse.pages
+                    location.nextPage = (photosResponse.page + 1) % photosResponse.pages
                     for photoResponse in photosResponse.photos {
                         let photo = Photo(photoResponse: photoResponse, context: self.coreDataStackManager.managedObjectContext)
                         photo.location = location
                         NetworkManager.getInstance().downloadPhoto(NSURL(string: photoResponse.url)!, callback: { (imageData, errorResponse) -> Void in
                             dispatch_async(dispatch_get_main_queue(), {
                                 if let imageData = imageData {
-                                    photo.path = FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
+                                    FileSystemManager.getInstance().savePhoto(photo.id, imageData: imageData)
+                                    photo.fileName = photo.id
                                     print("Saved photo \(photo.id)")
                                 } else {
                                     print("Removed photo \(photo.id)")

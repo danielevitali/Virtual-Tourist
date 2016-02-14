@@ -45,26 +45,30 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         mapView.setRegion(coordinateRegion, animated: false)
     }
     
-    func showPins(locations: [Location]) {
+    func showPins(pins: [Pin]) {
         mapView.removeAnnotations(mapView.annotations)
-        for location in locations {
-            let pin = addPin(location.latitude as Double, longitude: location.longitude as Double, draggable: false)
-            location.pin = pin
+        mapView.addAnnotations(pins)
+    }
+    
+    func addPin(pin: Pin) {
+        mapView.addAnnotation(pin)
+    }
+    
+    func removePin(pin: Pin) {
+        mapView.removeAnnotation(pin)
+    }
+    
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        let pin = annotation as! Pin
+        var view = mapView.dequeueReusableAnnotationViewWithIdentifier("pin") as? MKPinAnnotationView
+        if view == nil {
+            view = MKPinAnnotationView(annotation: pin, reuseIdentifier: "pin")
+            view!.canShowCallout = false
+            view!.draggable = true
+        } else {
+            view!.annotation = pin
         }
-    }
-    
-    func addPin(latitude: Double, longitude: Double, draggable: Bool) -> MKAnnotationView{
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let annotationView = MKAnnotationView()
-        annotationView.annotation = annotation
-        annotationView.draggable = draggable
-        mapView.addAnnotation(annotation)
-        return annotationView
-    }
-    
-    func removePin(pin: MKAnnotationView) {
-        mapView.removeAnnotation(pin.annotation!)
+        return view
     }
     
     func handleLongPressGesture(sender: UILongPressGestureRecognizer) {
@@ -82,8 +86,19 @@ class TravelLocationsMapViewController: UIViewController, TravelLocationsMapCont
         }
     }
     
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
+        switch (newState) {
+        case .Starting:
+            view.dragState = .Dragging
+        case .Ending, .Canceling:
+            view.dragState = .None
+            view.draggable = false
+        default: break
+        }
+    }
+    
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        presenter.onPinClick(view)
+        presenter.onPinClick(view.annotation as! Pin)
     }
     
     func showPhotoAlbum(location: Location) {

@@ -58,7 +58,7 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     func photosUpdate() {
         if let photos = fetchedPhotosController.fetchedObjects as? [Photo] {
             for photo in photos {
-                if photo.path == nil {
+                if photo.fileName == nil {
                     view.toggleNewCollectionButton(false)
                     return
                 }
@@ -74,7 +74,6 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
         
         if let photos = fetchedPhotosController.fetchedObjects as? [Photo] {
             for photo in photos {
-                photo.deletePhotoFile()
                 DataManager.getInstance().coreDataStackManager.deleteObject(photo)
             }
         }
@@ -84,7 +83,6 @@ class PhotoAlbumPresenter: PhotoAlbumContractPresenter {
     }
     
     func onPhotoClick(photo: Photo) {
-        photo.deletePhotoFile()
         DataManager.getInstance().coreDataStackManager.deleteObject(photo)
         DataManager.getInstance().coreDataStackManager.saveContext()
     }

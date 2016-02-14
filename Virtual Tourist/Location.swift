@@ -16,9 +16,9 @@ class Location: NSManagedObject {
     @NSManaged var latitude: NSNumber
     @NSManaged var longitude: NSNumber
     @NSManaged var album: [Photo]
-    @NSManaged var totalPagesCount: NSNumber?
+    @NSManaged var nextPage: NSNumber
     
-    var pin: MKAnnotationView?
+    var pin: Pin?
     
     init(latitude: Double, longitude: Double, context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Location", inManagedObjectContext: context)!

@@ -20,6 +20,6 @@ protocol TravelLocationsMapContractPresenter {
     
     func onLongClickOnMapEnd()
     
-    func onPinClick(pin: MKAnnotationView)
+    func onPinClick(pin: Pin)
     
 }

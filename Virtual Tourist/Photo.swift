@@ -12,7 +12,7 @@ import CoreData
 class Photo: NSManagedObject {
     
     @NSManaged var id: String
-    @NSManaged var path: String?
+    @NSManaged var fileName: String?
     @NSManaged var url: String
     @NSManaged var location: Location
     
@@ -27,12 +27,9 @@ class Photo: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    func deletePhotoFile() {
-        if let path = path {
-            let filemgr = NSFileManager.defaultManager()
-            do {
-                try filemgr.removeItemAtPath(path)
-            } catch {}
+    override func prepareForDeletion() {
+        if let fileName = fileName {
+            FileSystemManager.getInstance().deletePhoto(fileName)
         }
     }
 }

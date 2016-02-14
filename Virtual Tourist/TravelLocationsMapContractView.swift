@@ -16,13 +16,13 @@ protocol TravelLocationsMapContractView {
  
     func showMapRegion(region: MapRegion)
     
-    func addPin(latitude: Double, longitude: Double, draggable: Bool) -> MKAnnotationView
+    func addPin(pin: Pin)
     
-    func removePin(pin: MKAnnotationView)
+    func removePin(pin: Pin)
     
     func showPhotoAlbum(location: Location)
     
-    func showPins(locations: [Location])
+    func showPins(pins: [Pin])
     
     func showError(message: String)
     

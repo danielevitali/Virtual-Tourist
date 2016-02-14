@@ -14,8 +14,8 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     
     let view: TravelLocationsMapContractView
     
-    var locations: [Location]!
-    var droppingAnnotation: MKAnnotationView!
+    var locations: [Location]
+    var droppingPin: Pin!
     
     init(view: TravelLocationsMapContractView) {
         self.view = view
@@ -25,7 +25,13 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
         }
         if let locations = DataManager.getInstance().getLocations() {
             self.locations = locations
-            view.showPins(locations)
+            var pins = [Pin]()
+            for location in locations {
+                let pin = Pin(latitude: location.latitude as Double, longitude: location.longitude as Double)
+                pin.location = location
+                pins.append(pin)
+            }
+            view.showPins(pins)
         } else {
             self.locations = [Location]()
             view.showError("Error loading pins on map")
@@ -37,23 +43,19 @@ class TravelLocationsMapPresenter: TravelLocationsMapContractPresenter {
     }
     
     func onLongClickOnMapBegin(latitude: Double, longitude: Double) {
-        droppingAnnotation = view.addPin(latitude, longitude: longitude, draggable: true)
+        droppingPin = Pin(latitude: latitude, longitude: longitude)
+        view.addPin(droppingPin)
     }
     
     func onLongClickOnMapEnd() {
-        let coordinate = droppingAnnotation.annotation!.coordinate
-        let location = DataManager.getInstance().createLocation(coordinate.latitude, longitude: coordinate.longitude)
+        let location = DataManager.getInstance().createLocation(droppingPin.coordinate.latitude, longitude: droppingPin.coordinate.longitude)
+        droppingPin.location = location
         DataManager.getInstance().searchPhotos(location)
         view.showPhotoAlbum(location)
     }
     
-    func onPinClick(pin: MKAnnotationView) {
-        for location in locations {
-            if location.pin == pin {
-                view.showPhotoAlbum(location)
-                break;
-            }
-        }
+    func onPinClick(pin: Pin) {
+        view.showPhotoAlbum(pin.location!)
     }
     
 }

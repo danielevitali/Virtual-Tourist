@@ -14,8 +14,8 @@ class PhotoCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     
     func showPhoto(photo: Photo) {
-        if let path = photo.path {
-            imageView.image = UIImage(contentsOfFile: path)
+        if let fileName = photo.fileName {
+            imageView.image = UIImage(contentsOfFile: FileSystemManager.getInstance().getPhotoPath(fileName))
             print("Show photo \(photo.id)")
         } else {
             imageView.image = UIImage(named: "photo_placeholder")
